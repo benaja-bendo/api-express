@@ -21,11 +21,15 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan -H 91.214.191.172 >> ~/.ssh/known_hosts
+          cat ~/.ssh/known_hosts  # Debugging output to check known_hosts contents
 
       - name: Check SSH agent status
         run: ssh-add -l
 
       - name: Deploy to VPS
         run: |
-          ssh -o StrictHostKeyChecking=yes ubuntu@91.214.191.172 "cd /home/ubuntu/docker/apps/api-express && git pull origin main"
+          ssh -o StrictHostKeyChecking=no ubuntu@91.214.191.172 <<EOF
+          cd /home/ubuntu/docker/apps/api-express
+          git pull origin main
+          EOF
          
