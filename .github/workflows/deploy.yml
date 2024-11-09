@@ -21,6 +21,9 @@ jobs:
         run: |
           ssh-keyscan -H 91.214.191.172 >> ~/.ssh/known_hosts
 
+      - name: Check SSH agent status
+        run: ssh-add -l
+
       - name: Deploy to VPS
         run: |
-          ssh -i ~/.ssh/id_rsa ubuntu@91.214.191.172 "cd /home/ubuntu/docker/apps/api-express && git pull origin main"
+          ssh ubuntu@91.214.191.172 "cd /home/ubuntu/docker/apps/api-express && git pull origin main"
