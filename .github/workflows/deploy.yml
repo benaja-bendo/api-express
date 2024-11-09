@@ -25,7 +25,7 @@ jobs:
 
       - name: Deploy to VPS
         run: |
-          ssh -T -o StrictHostKeyChecking=no ubuntu@91.214.191.172 <<EOF
+          ssh ubuntu@91.214.191.172 <<EOF
           cd /home/ubuntu/docker/apps/api-express
           git pull origin main
           EOF
