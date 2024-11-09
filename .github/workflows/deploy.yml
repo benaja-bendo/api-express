@@ -26,4 +26,4 @@ jobs:
 
       - name: Deploy to VPS
         run: |
-          ssh ubuntu@91.214.191.172 "cd /home/ubuntu/docker/apps/api-express && git pull origin main"
+          ssh -i ${{ secrets.SSH_VPN_KEY }} ubuntu@91.214.191.172 "cd /home/ubuntu/docker/apps/api-express && git pull origin main"
