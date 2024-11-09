@@ -25,7 +25,5 @@ jobs:
 
       - name: Deploy to VPS
         run: |
-          ssh ubuntu@91.214.191.172 <<EOF
-          cd /home/ubuntu/docker/apps/api-express
-          git pull origin main
-          EOF
+          ssh ubuntu@91.214.191.172 "cd /home/ubuntu/docker/apps/api-express && git pull origin main"
+         
