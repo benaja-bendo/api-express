@@ -9,27 +9,28 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out the repository
+      - name: Checkout the repository
         uses: actions/checkout@v4.2.2
 
-      - name: Set up SSH
+      - name: Set up SSH agent
         uses: webfactory/ssh-agent@v0.9.0
         with:
-          ssh-private-key: ${{ secrets.SSH_VPN_KEY }}
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Add VPS to known_hosts
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -H 91.214.191.172 >> ~/.ssh/known_hosts
-          cat ~/.ssh/known_hosts  # Debugging output to check known_hosts contents
-
-      - name: Check SSH agent status
-        run: ssh-add -l
+          ssh-keyscan 91.214.191.172 >> ~/.ssh/known_hosts
+          # Optional: Check known_hosts contents
+          # cat ~/.ssh/known_hosts
 
       - name: Deploy to VPS
-        run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@91.214.191.172 <<EOF
-          cd /home/ubuntu/docker/apps/api-express
-          git pull origin main
-          EOF
-         
+        uses: appleboy/ssh-action@v1.1.0
+        with:
+          host: 91.214.191.172
+          username: ubuntu
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /home/ubuntu/docker/apps/api-express
+            git pull origin main
+            # Add any additional deployment steps here, e.g., restarting services
