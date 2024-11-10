@@ -16,16 +16,11 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan 91.214.191.172 >> ~/.ssh/known_hosts
-          # Optional: Check known_hosts contents
-          # cat ~/.ssh/known_hosts
 
       - name: Deploy to VPS
-        uses: appleboy/ssh-action@v1.1.0
-        with:
-          host: 91.214.191.172
-          username: ubuntu
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            cd /home/ubuntu/docker/apps/api-express
-            git pull origin main
-            # Add any additional deployment steps here, e.g., restarting services
+        run: |
+          ssh -i ${{ secrets.SSH_PRIVATE_KEY }} ubuntu@91.214.191.172 <<EOF
+          cd /home/ubuntu/docker/apps/api-express
+          git pull origin main
+          # Add any additional deployment steps here, e.g., restarting services
+          EOF
