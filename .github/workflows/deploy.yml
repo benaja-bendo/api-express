@@ -1,4 +1,4 @@
-name: Deploy to VPS
+name: Déploiement sur VPS
 
 on:
   push:
@@ -9,18 +9,18 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout the repository
+      - name: Checkout du code
         uses: actions/checkout@v4.2.2
+        
+      - name: Configuration de SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Add VPS to known_hosts
+      - name: Déploiement sur le serveur
         run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan 91.214.191.172 >> ~/.ssh/known_hosts
-
-      - name: Deploy to VPS
-        run: |
-          ssh -i ${{ secrets.SSH_PRIVATE_KEY }} ubuntu@91.214.191.172 <<EOF
-          cd /home/ubuntu/docker/apps/api-express
-          git pull origin main
-          # Add any additional deployment steps here, e.g., restarting services
-          EOF
+            ssh -o StrictHostKeyChecking=no ubuntu@91.214.191.172 << 'EOF'
+              cd /home/ubuntu/docker/apps/api-express
+              git pull origin main
+              # Ajoutez ici les commandes nécessaires pour redémarrer votre application
+            EOF
